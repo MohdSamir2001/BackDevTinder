@@ -1,1 +1,7 @@
-- create repsitory
+- Create a repsitory
+- Initialize the repository
+- add .gitignore file to ignore node_modules
+- push code to remote origin
+- use that route above which have more ////
+- use / route in bottom
+- Install postman api and make a workspace/collection -> test api call
