@@ -23,3 +23,46 @@ app.get("/user", (req, res, next) => {
   console.log("Handling the route user 2");
 });
 --> infinite loop
+
+How express JS basically handles requests behind the scene
+
+--- Traditional Way To Check Authorized User ---
+
+app.get("/admin/getAllData", (req, res, next) => {
+  // Logic of checking if the request is authorized
+  const token = "iamsamir";
+  const isAdminAuthorized = token === "iamsamir";
+  if (isAdminAuthorized) {
+    res.send("All Data Sent");
+  } else {
+    res.status(401).send("Unauthorized request");
+  }
+});
+app.get("/admin/deleteUser", (req, res, next) => {
+  const token = "iamsamir";
+  const isAdminAuthorized = token === "iamsamir";
+  if (isAdminAuthorized) {
+    res.send("Deleted a user");
+  } else {
+    res.status(401).send("Unauthorized request");
+  }
+});
+
+--- Second Way To Check Authorized User --- 
+// Handle Auth Middleware for all GET POST , .... requests
+app.use("/admin", (req, res, next) => {
+  console.log("Admin auth is getting checked");
+  const token = "iamsamir";
+  const isAdminAuthorized = token === "iamsamir";
+  if (!isAdminAuthorized) {
+    res.status(401).send("Unauthorized request");
+  } else {
+    next();
+  }
+});
+app.get("/admin/getAllData", (req, res, next) => {
+  res.send("All Data Sent");
+});
+app.get("/admin/deleteUser", (req, res, next) => {
+  res.send("Deleted a user");
+});

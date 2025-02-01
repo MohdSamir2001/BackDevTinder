@@ -29,3 +29,5 @@
 - /a/ in this we not use " " , it means we can add anything but it includes a .
 
 - /.\*fly$/ in this also we not use "" , it means we can add anything but it includes fly -> eg. butterfly
+
+- Write a dummy auth middleware for all user routes , except /user/login
