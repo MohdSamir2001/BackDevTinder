@@ -1,7 +1,31 @@
 - Create a repsitory
+
 - Initialize the repository
+
 - add .gitignore file to ignore node_modules
+
 - push code to remote origin
+
 - use that route above which have more ////
+
 - use / route in bottom
+
 - Install postman api and make a workspace/collection -> test api call
+
+- http://localhost:7860/user?userId=101&password=1234 then console.log(req.query) => { userId: '101', password: '1234' } here ? optional
+
+- http://localhost:7860/user/103/samir/2345 and with code "/user/:userId/:userName/:password" then console.log(req.params) => { userId: '103', userName: 'samir', password: '2345' }
+
+- "/ab?c" -> it means that we can remove b or not
+
+- "/a(bd)?c" -> it means that we can remove bd or but not a and c
+
+- "/ab+c" -> it means that we can add many times b to next b -> eg . abbbbbbbbb...c
+
+- "/a(bc)+d" -> it means that we can add many times b to next b -> eg . abcbcbcbc...d
+
+- "/ab\*(astress)cd" -> it means that we can add anything in between ab and cd.
+
+- /a/ in this we not use " " , it means we can add anything but it includes a .
+
+- /.\*fly$/ in this also we not use "" , it means we can add anything but it includes fly -> eg. butterfly
