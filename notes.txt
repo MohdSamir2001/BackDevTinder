@@ -66,3 +66,29 @@ app.get("/admin/getAllData", (req, res, next) => {
 app.get("/admin/deleteUser", (req, res, next) => {
   res.send("Deleted a user");
 });
+
+--> agar koi error generate ho gayi
+app.get("/getUserData", (req, res) => {
+  // Logic of DB call and get user data
+  throw new Error("itisaerror");
+  res.send("User Data Sent");
+});
+
+--> use error koi kisi special ui ke through dikhane ke liye
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    // Log your error message
+    res.status(500).send("something went wrong");
+  }
+});
+
+---> isme dono cheze ek sath ho gayi hai
+app.get("/getUserData", (req, res) => {
+  try {
+    // Logic of DB call and get user data
+    throw new Error("bhaiyaerrorgenratehogayihai");
+    res.send("User Data Sent");
+  } catch (err) {
+    res.status(500).send("Some error contact support team");
+  }
+});
