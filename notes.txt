@@ -1,2 +1,25 @@
 // Route Handlers
+-- First Way --
 app.use("/route",[rH1 , rH2] , rH3 , rH4)
+
+-- Second Way --
+a)
+app.get("/user", (req, res, next) => {
+  console.log("Handling the route user 1");
+  next();
+});
+app.get("/user", (req, res, next) => {
+  console.log("Handling the route user 2");
+  next();
+});
+
+--> route does not exist , not found /user
+b)
+app.get("/user", (req, res, next) => {
+  console.log("Handling the route user 1");
+  next();
+});
+app.get("/user", (req, res, next) => {
+  console.log("Handling the route user 2");
+});
+--> infinite loop
