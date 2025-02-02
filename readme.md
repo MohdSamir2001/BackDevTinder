@@ -43,3 +43,9 @@
 - Call the connectDB function and connect to database before starting application on 7860
 
 - Create a userSchema & user Model
+
+- Create /signup API to add data to database
+
+- Push some document using API call from postman
+
+- Error handling using try catch
