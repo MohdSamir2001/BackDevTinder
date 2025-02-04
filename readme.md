@@ -49,3 +49,13 @@
 - Push some document using API call from postman
 
 - Error handling using try catch
+
+- Add the express.json() middleware to app
+
+- Made /signup API dyanamic to recieve data from the end user
+
+- API - feed API - GET /feed - get all the users from the database
+
+- API - Get user by ID
+
+- Create a delete user API
