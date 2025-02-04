@@ -59,3 +59,7 @@
 - API - Get user by ID
 
 - Create a delete user API
+
+- API - update the user
+
+- Explore the Mongoose Documentation for Model methods
