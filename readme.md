@@ -71,3 +71,5 @@
 - Add timestamps to the userSchema
 
 - Add API level validation on Patch requests & signup post api
+
+- Explore validator library npm i validator , and validate email , password and photoURL
