@@ -63,3 +63,9 @@
 - API - update the user
 
 - Explore the Mongoose Documentation for Model methods
+
+- Create a custom validate function for gender
+
+- Put all appropriate validations on each field in Schema
+
+- Add timestamps to the userSchema

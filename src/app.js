@@ -9,7 +9,7 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("User added successfully");
   } catch (err) {
-    res.status(400).send("Error saving the user" + err.message);
+    res.status(400).send("Error saving the user : " + err.message);
   }
 });
 app.get("/user", async (req, res) => {
@@ -30,11 +30,12 @@ app.patch("/user", async (req, res) => {
     // const user = await User.findByIdAndUpdate({ _id: userId }, data); // default is before
     const user = await User.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "after",
+      runValidators: true,
     });
     res.send("User data updated sucessfully");
     console.log(user);
   } catch (err) {
-    res.status(400).send("Something went wrong");
+    res.status(400).send("UPDATE FAILED : " + err.message);
   }
 });
 app.get("/feed", async (req, res) => {

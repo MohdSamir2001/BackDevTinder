@@ -1,25 +1,62 @@
 const mongoose = require("mongoose");
 // User work as a class , we will create instances on the basis of this class
-const userSchema = mongoose.Schema({
-  firstName: {
-    type: String,
+const userSchema = mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      minLength: 4,
+      maxLength: 20,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      trime: true,
+    },
+    emailId: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    age: {
+      type: Number,
+      min: 18,
+      trim: true,
+    },
+    gender: {
+      type: String,
+      validate(value) {
+        if (!["male", "female", "others"].includes(value)) {
+          throw new Error("Gender data is not valid");
+        }
+      },
+      trim: true,
+    },
+    photoUrl: {
+      type: String,
+      default:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwVLdSDmgrZN7TkzbHJb8dD0_7ASUQuERL2A&s",
+      trim: true,
+    },
+    about: {
+      type: String,
+      default: "This is a default about of the user",
+    },
+    skills: {
+      type: [String],
+    },
   },
-  lastName: {
-    type: String,
-  },
-  emailId: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  age: {
-    type: Number,
-  },
-  gender: {
-    type: String,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 // const User = mongoose.model("User", userSchema);
 // module.exports = User;
 module.exports = mongoose.model("User", userSchema);
