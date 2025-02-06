@@ -1,11 +1,69 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const app = express();
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
 app.use(express.json());
-app.post("/signup", async (req, res) => {
-  const user = new User(req.body);
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+app.post("/login", async (req, res) => {
   try {
+    const { emailId, password } = req.body;
+    const user = await User.findOne({ emailId: emailId });
+    // user is present in the database or not
+    if (!user) {
+      throw new Error("Invalid login credentials");
+    }
+    // check password is validate or not
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (isPasswordValid) {
+      // now everything is checked , it means a authorized user request the server
+      // create a jwt token
+      const token = await jwt.sign({ _id: user._id }, "mynameissamir@103"); // userId hided in this token
+      // secret key only knows the server
+      // add token to cookies and send the response back to the user
+      res.cookie("token", token);
+      res.send("Logged in successfully");
+    } else {
+      throw new Error("Invalid login credentials");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
+});
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+    // Validate my token
+    const decodedMessage = jwt.verify(token, "mynameissamir@103");
+    const { _id } = decodedMessage;
+    const user = await User.findById({ _id });
+    if (!user) throw new Error("User does not exist");
+    res.send(user);
+  } catch (err) {
+    res.status(401).send("ERROR : " + err.message);
+  }
+});
+app.post("/signup", async (req, res) => {
+  try {
+    // Validation of data
+    validateSignUpData(req);
+    // Encrypt The Password
+    const { password, firstName, lastName, emailId } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // Creating a new instance of the User Model
+    const user = new User({
+      firstName,
+      emailId,
+      lastName,
+      password: hashedPassword,
+    });
     await user.save();
     res.send("User added successfully");
   } catch (err) {

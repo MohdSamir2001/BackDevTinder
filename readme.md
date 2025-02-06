@@ -73,3 +73,19 @@
 - Add API level validation on Patch requests & signup post api
 
 - Explore validator library npm i validator , and validate email , password and photoURL
+
+- Create Login API
+
+- Compare passwords and throw errors if email or password is invalid
+
+- install cookie-parser
+
+- just send a dummy cookie to user
+
+- create GET /profile API and check if you get the cookie back
+
+- install jsonwebtoken
+
+- In login API , after email and password validation , create a JWT token and send it to user in cookie
+
+- Read the cookies inside your profile
