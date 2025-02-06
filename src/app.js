@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const app = express();
+const { userAuth } = require("./middlewares/auth");
 const { connectDB } = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
@@ -21,10 +22,14 @@ app.post("/login", async (req, res) => {
     if (isPasswordValid) {
       // now everything is checked , it means a authorized user request the server
       // create a jwt token
-      const token = await jwt.sign({ _id: user._id }, "mynameissamir@103"); // userId hided in this token
+      const token = await jwt.sign({ _id: user._id }, "mynameissamir@103", {
+        expiresIn: "1d",
+      }); // userId hided in this token
       // secret key only knows the server
       // add token to cookies and send the response back to the user
-      res.cookie("token", token);
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 7 * 3600000),
+      });
       res.send("Logged in successfully");
     } else {
       throw new Error("Invalid login credentials");
@@ -33,17 +38,9 @@ app.post("/login", async (req, res) => {
     res.status(400).send("ERROR : " + err.message);
   }
 });
-app.get("/profile", async (req, res) => {
+app.get("/profile", userAuth, async (req, res) => {
   try {
-    const cookies = req.cookies;
-    const { token } = cookies;
-    if (!token) {
-      throw new Error("Invalid Token");
-    }
-    // Validate my token
-    const decodedMessage = jwt.verify(token, "mynameissamir@103");
-    const { _id } = decodedMessage;
-    const user = await User.findById({ _id });
+    const user = req.user;
     if (!user) throw new Error("User does not exist");
     res.send(user);
   } catch (err) {
@@ -122,6 +119,11 @@ app.delete("/user", async (req, res) => {
   } catch (err) {
     res.status(400).send("Something went wrong");
   }
+});
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  // Sending a connection request
+  const user = req.user;
+  res.send(user.firstName + " sent the request");
 });
 connectDB()
   .then(() => {
