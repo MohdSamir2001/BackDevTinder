@@ -18,13 +18,12 @@ app.post("/login", async (req, res) => {
       throw new Error("Invalid login credentials");
     }
     // check password is validate or not
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       // now everything is checked , it means a authorized user request the server
       // create a jwt token
-      const token = await jwt.sign({ _id: user._id }, "mynameissamir@103", {
-        expiresIn: "1d",
-      }); // userId hided in this token
+      const token = await user.getJWT();
+      // userId hided in this token
       // secret key only knows the server
       // add token to cookies and send the response back to the user
       res.cookie("token", token, {
