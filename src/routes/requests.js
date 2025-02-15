@@ -57,4 +57,41 @@ requestRouter.post(
     }
   }
 );
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      const loggedInUser = await req.user;
+      const { status, requestId } = req.params;
+      // Validate the status
+      const allowedStatus = ["accepted", "rejected"];
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).json({ message: "Status not allowed" });
+      }
+      // check request id is present in the database or not
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: loggedInUser._id,
+        status: "interested",
+      });
+      if (!connectionRequest) {
+        return res
+          .status(404)
+          .json({ message: "Connection request not found" });
+      }
+      // Samir send the connection request (intrested) to ansh
+      // Then here in this api , ansh is the loggedInUser , ansh checks what requests come from others
+      // LoggedInUser == toUserId
+      // requestId means , it is the id , in which samir send request to ansh , it is the id of ducument stored in
+      // the database , this document contains connection btw samir and ansh in which samir send interested
+      // request to ansh;
+      connectionRequest.status = status;
+      const data = await connectionRequest.save();
+      res.json({ message: "Connection request " + status, data });
+    } catch (err) {
+      res.status(400).send("ERROR : " + err.message);
+    }
+  }
+);
 module.exports = requestRouter;
