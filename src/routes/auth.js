@@ -8,8 +8,7 @@ authRouter.post("/signup", async (req, res) => {
     // Validation of data
     validateSignUpData(req);
     // Encrypt The Password
-    const { password, photoUrl, about, skills, firstName, lastName, emailId } =
-      req.body;
+    const { password, firstName, lastName, emailId } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     // Creating a new instance of the User Model
     const user = new User({
@@ -19,10 +18,16 @@ authRouter.post("/signup", async (req, res) => {
       about,
       skills,
       lastName,
+      age,
+      gender,
       password: hashedPassword,
     });
-    await user.save();
-    res.send("User added successfully");
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
+    res.json({ message: "User added successfully !!", data: savedUser });
   } catch (err) {
     res.status(400).send("Error saving the user : " + err.message);
   }

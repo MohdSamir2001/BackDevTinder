@@ -18,6 +18,9 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
       throw new Error("Invalid Edit Request");
     }
     const loggedInUser = req.user;
+    const newFirstName = req.body.firstName;
+    if (newFirstName.length < 4)
+      throw new Error("Minimum length of first name must be at least 4");
     // loggedInUser.firstName = req.body.firstName;
     // loggedInUser.lastName = req.body.lastName;
     // loggedInUser.photoUrl = req.body.photoUrl;
@@ -30,7 +33,7 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
       data: loggedInUser,
     });
   } catch (err) {
-    res.send("ERROR : " + err.message);
+    res.status(404).send("ERROR : " + err.message);
   }
 });
 profileRouter.patch("/profile/edit/password", userAuth, async (req, res) => {
