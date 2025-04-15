@@ -49,7 +49,7 @@ const initializeSocket = (server) => {
           console.log(err);
         }
       }
-    ); 
+    );
     socket.on("disconnect", () => {});
   });
 };
