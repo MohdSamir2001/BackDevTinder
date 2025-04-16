@@ -45,8 +45,12 @@ authRouter.post("/login", async (req, res) => {
       // secret key only knows the server
       // add token to cookies and send the response back to the user
       res.cookie("token", token, {
-        expires: new Date(Date.now() + 7 * 3600000),
+        httpOnly: true,
+        secure: true, // required for SameSite=None
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days or whatever you want
       });
+
       res.send(user);
     } else {
       throw new Error("Invalid login credentials");
