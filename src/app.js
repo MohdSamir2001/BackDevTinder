@@ -7,10 +7,11 @@ const http = require("http");
 require("dotenv").config();
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend url
-    credentials: true, // enable setting cookies in the response
+    origin: ["http://localhost:5173", "https://dev-tinder-ui-five.vercel.app"],
+    credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 const authRouter = require("./routes/auth");
